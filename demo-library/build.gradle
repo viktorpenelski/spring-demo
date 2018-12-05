@@ -1,0 +1,44 @@
+buildscript {
+    repositories { mavenCentral() }
+}
+
+plugins {
+    id "io.spring.dependency-management" version "1.0.5.RELEASE"
+    id "maven-publish"
+}
+
+ext {
+    springBootVersion = '2.0.5.RELEASE'
+}
+
+apply plugin: 'java'
+apply plugin: 'eclipse'
+
+jar {
+    baseName = libName
+    version = libVersion
+}
+sourceCompatibility = 11
+
+publishing {
+    publications {
+        maven(MavenPublication) {
+            groupId = 'com.github.viktorpenelski'
+            artifactId = libName
+            version = libVersion
+
+            from components.java
+        }
+    }
+}
+
+repositories { mavenCentral() }
+
+dependencies {
+    compile('org.springframework.boot:spring-boot-starter')
+    testCompile('org.springframework.boot:spring-boot-starter-test')
+}
+
+dependencyManagement {
+    imports { mavenBom("org.springframework.boot:spring-boot-dependencies:${springBootVersion}") }
+}
